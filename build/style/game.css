@@ -1,0 +1,19 @@
+canvas {
+    position: absolute;
+    left:0px;
+    right:0px;
+    width: 800px;
+    height: 600px;
+}
+
+.canvas-container {
+    position: relative;
+    border: 1px solid #000000;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 800px;
+    height: 600px;
+}

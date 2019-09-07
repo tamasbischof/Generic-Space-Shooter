@@ -1,0 +1,28 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="style/game.css" />
+    <title>Canvas demo</title>
+</head>
+
+<body>
+    <div class="canvas-container">
+        <canvas id="farBackgroundCanvas" style="z-index: 1;">Your browser does not support HTML5 canvases.</canvas>
+        <canvas id="nearBackgroundCanvas" style="z-index: 2;"></canvas>
+        <canvas id="projectileCanvas" style="z-index: 3;"></canvas>
+        <canvas id="actorCanvas" style="z-index: 4;"></canvas>
+        <!-- <button style="z-index:5;">GAME1</button>
+        <button style="z-index:5;">GAME2</button>
+        <button style="z-index:5;">GAME3</button>
+        <button style="z-index:5;">EXIT</button> -->
+    </div>
+    <script src="projectileLayer.js"></script>
+    <script src="backgroundLayer.js"></script>
+    <script src="game.js"></script>
+    <script src="structures.js"></script>
+    <script src="inputHandler.js"></script>
+    <script src="player.js"></script>
+    <script src="start.js"></script>
+</body>
+
+</html>
