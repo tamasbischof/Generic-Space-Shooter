@@ -3,6 +3,7 @@ class Game {
         this.player = new Player(actorCanvas);
         this.backgroundLayer = new BackgroundLayer();
         this.projectileLayer = new ProjectileLayer();
+        this.enemySpawner = new EnemySpawner();
         window.requestAnimationFrame(() => this.draw());
     }
     //start draw loop
@@ -14,6 +15,7 @@ class Game {
         this.backgroundLayer.drawAll();
         this.projectileLayer.draw();
         this.player.draw();
+        this.enemySpawner.draw();
         window.requestAnimationFrame(() => this.draw());
     }
 }

@@ -3,11 +3,13 @@ class Game {
     readonly player : Player;
     readonly backgroundLayer : BackgroundLayer;
     readonly projectileLayer : ProjectileLayer;
+    readonly enemySpawner : EnemySpawner;
 
     constructor() {
         this.player = new Player(actorCanvas);
         this.backgroundLayer = new BackgroundLayer();
         this.projectileLayer = new ProjectileLayer();
+        this.enemySpawner = new EnemySpawner();
         window.requestAnimationFrame(() => this.draw())
     }
     
@@ -20,6 +22,7 @@ class Game {
         this.backgroundLayer.drawAll();
         this.projectileLayer.draw();
         this.player.draw();
+        this.enemySpawner.draw();
         window.requestAnimationFrame(() => this.draw());
     }
 }

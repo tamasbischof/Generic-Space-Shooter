@@ -12,7 +12,7 @@ class ProjectileLayer {
             projectile.updatePosition();
             pcContext.drawImage(this.projectileSprite, projectile.position.x, projectile.position.y);
         });
-        this.projectiles = this.projectiles.filter(function (value, index, array) {
+        this.projectiles = this.projectiles.filter(function (value) {
             return value.position.x < canvasWidth;
         });
     }
