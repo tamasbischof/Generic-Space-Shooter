@@ -17,6 +17,9 @@ class Player extends MovableEntity {
         this._position.add(direction);
         this.clampToCanvas();
     }
+    shootProjectile() {
+        game.projectileLayer.addprojectile(new Vector2D(this._position.x, this._position.y + this._height / 2));
+    }
     clampToCanvas() {
         if (this._position.x > canvasWidth - this._width) {
             this._position.x = canvasWidth - this._width;

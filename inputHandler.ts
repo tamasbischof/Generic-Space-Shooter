@@ -18,7 +18,6 @@ class InputHandler {
 
     handleKeyUp(evt:KeyboardEvent) {
         this.keys.set(evt.key.toLowerCase(), false);
-        console.log(evt.key.toLowerCase());
         evt.preventDefault();
     }
 
@@ -38,7 +37,7 @@ class InputHandler {
             direction.x -= this.speed;
         }
         if (this.keys.get(" ")) {
-            game.projectileLayer.addprojectile(new Vector2D(this.player.position.x, this.player.position.y));
+            this.player.shootProjectile();
         }
 
         this.player.updatePosition(direction);

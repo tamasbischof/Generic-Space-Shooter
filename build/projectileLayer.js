@@ -1,9 +1,15 @@
 class ProjectileLayer {
     constructor() {
+        this.canShoot = true;
         this.projectiles = new Array();
     }
     addprojectile(position) {
+        if (!this.canShoot) {
+            return;
+        }
         this.projectiles.push(new Projectile(position));
+        this.canShoot = false;
+        window.setTimeout(() => { this.canShoot = true; }, 500);
     }
     draw() {
         this.projectiles.forEach(projectile => {
@@ -17,6 +23,7 @@ class ProjectileLayer {
 class Projectile extends MovableEntity {
     constructor(position, width = 33, height = 9) {
         super(position, width, height);
+        this._position.y -= this._height / 2;
         this._speed = 7;
         this._heading = new Vector2D(this._speed, 0);
     }

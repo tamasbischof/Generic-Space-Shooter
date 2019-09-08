@@ -1,5 +1,5 @@
 class Player extends MovableEntity {
-
+    
     private readonly _input: InputHandler;
     
     constructor(width: number = 50, height: number = 50) {
@@ -12,15 +12,19 @@ class Player extends MovableEntity {
         window.addEventListener('keydown', (e) => { this._input.handleKeyDown(e); });
         window.addEventListener('keyup', (e) => { this._input.handleKeyUp(e); });
     }
-
+    
     draw() {
         this._input.handleInput();
         super.draw(acContext);
     }
-
+    
     updatePosition(direction : Vector2D) {
         this._position.add(direction);
         this.clampToCanvas();       
+    }
+    
+    shootProjectile() {
+        game.projectileLayer.addprojectile(new Vector2D(this._position.x, this._position.y + this._height / 2));
     }
     
     clampToCanvas() {
