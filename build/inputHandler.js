@@ -30,7 +30,6 @@ class InputHandler {
         }
         if (this.keys.get(" ")) {
             game.projectileLayer.addprojectile(new Vector2D(this.player.position.x, this.player.position.y));
-            console.log("fire");
         }
         this.player.updatePosition(direction);
     }

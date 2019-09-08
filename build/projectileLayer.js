@@ -1,7 +1,5 @@
 class ProjectileLayer {
     constructor() {
-        this.projectileSprite = new Image();
-        this.projectileSprite.src = "sprites/laserGreen.bmp";
         this.projectiles = new Array();
     }
     addprojectile(position) {
@@ -9,24 +7,24 @@ class ProjectileLayer {
     }
     draw() {
         this.projectiles.forEach(projectile => {
-            projectile.updatePosition();
-            pcContext.drawImage(this.projectileSprite, projectile.position.x, projectile.position.y);
+            projectile.draw();
         });
         this.projectiles = this.projectiles.filter(function (value) {
             return value.position.x < canvasWidth;
         });
     }
 }
-class Projectile {
-    constructor(position) {
-        this._position = position;
-        this.speed = 7;
+class Projectile extends MovableEntity {
+    constructor(position, width = 33, height = 9) {
+        super(position, width, height);
+        this._speed = 7;
+        this._heading = new Vector2D(this._speed, 0);
     }
-    get position() {
-        return this._position;
-    }
-    updatePosition() {
-        this._position.x += this.speed;
+    draw() {
+        this.updatePosition(this._heading);
+        super.draw(pcContext, Projectile.sprite);
     }
 }
+Projectile.sprite = new Image();
+Projectile.sprite.src = "sprites/laserGreen.bmp";
 //# sourceMappingURL=projectileLayer.js.map

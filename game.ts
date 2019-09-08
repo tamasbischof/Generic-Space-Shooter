@@ -6,7 +6,7 @@ class Game {
     readonly enemySpawner : EnemySpawner;
 
     constructor() {
-        this.player = new Player(actorCanvas);
+        this.player = new Player();
         this.backgroundLayer = new BackgroundLayer();
         this.projectileLayer = new ProjectileLayer();
         this.enemySpawner = new EnemySpawner();

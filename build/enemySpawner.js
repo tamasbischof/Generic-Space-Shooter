@@ -16,24 +16,17 @@ class EnemySpawner {
         });
     }
 }
-class Enemy {
+class Enemy extends MovableEntity {
     constructor(position, width = 30, height = 30) {
-        this._speed = 4;
+        super(position, width, height);
         this.outOfBounds = false;
-        this._position = position;
-        this._width = width;
-        this._height = height;
+        this._speed = 4;
         this.setNewHeading();
     }
-    get position() { return this._position; }
     draw() {
-        this.updatePosition();
+        this.updatePosition(this._heading);
         this.clampToCanvas();
-        acContext.drawImage(Enemy.sprite, this._position.x, this._position.y, this._width, this._height);
-    }
-    updatePosition() {
-        this._position.add(this._heading);
-        console.log(this._heading);
+        super.draw(acContext, Enemy.sprite);
     }
     setNewHeading() {
         //when on upper half

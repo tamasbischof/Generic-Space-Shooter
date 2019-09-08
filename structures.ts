@@ -24,7 +24,7 @@ class Vector2D {
         this.y /= magnitude;
     }
 
-    get magnitude() : number {
+    get magnitude(): number {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 }
@@ -44,5 +44,29 @@ class Collider {
 
     constructor(extents: Vector2D) {
         this._extents = extents;
+    }
+}
+
+class MovableEntity {
+    protected _position: Vector2D;
+    protected _sprite: HTMLImageElement;
+    protected _width: number;
+    protected _height: number;
+    protected _speed: number;
+
+    get position(): Vector2D { return this._position; }
+
+    protected constructor(position: Vector2D, width: number, height: number) {
+        this._position = position;
+        this._width = width;
+        this._height = height;
+    }
+
+    updatePosition(direction: Vector2D) {
+        this._position.add(direction);
+    }
+
+    draw(context : CanvasRenderingContext2D, sprite : HTMLImageElement = this._sprite) {
+        context.drawImage(sprite, this._position.x, this._position.y, this._width, this._height);
     }
 }

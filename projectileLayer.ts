@@ -4,8 +4,6 @@ class ProjectileLayer {
     private projectiles: Array<Projectile>;
 
     constructor() {
-        this.projectileSprite = new Image();
-        this.projectileSprite.src = "sprites/laserGreen.bmp";
         this.projectiles = new Array<Projectile>();
     }
 
@@ -15,8 +13,7 @@ class ProjectileLayer {
 
     draw() {
         this.projectiles.forEach(projectile => {
-            projectile.updatePosition();
-            pcContext.drawImage(this.projectileSprite, projectile.position.x, projectile.position.y);
+            projectile.draw();
         });
         this.projectiles = this.projectiles.filter(
             function(value) {
@@ -25,22 +22,22 @@ class ProjectileLayer {
     }
 }
 
-class Projectile {
+class Projectile extends MovableEntity {
 
-    private _position: Vector2D;
-    private readonly speed: number;
-    private readonly sprite: HTMLImageElement;
+    static sprite : HTMLImageElement;
+    private _heading : Vector2D
 
-    get position(): Vector2D {
-        return this._position;
+    constructor(position : Vector2D, width : number = 33, height : number = 9) {
+        super(position, width, height);
+        this._speed = 7;
+        this._heading = new Vector2D(this._speed, 0);
     }
 
-    constructor(position: Vector2D) {
-        this._position = position;
-        this.speed = 7;
-    }
-
-    updatePosition() {
-        this._position.x += this.speed;
+    draw() {
+        this.updatePosition(this._heading);
+        super.draw(pcContext, Projectile.sprite);
     }
 }
+
+Projectile.sprite = new Image();
+Projectile.sprite.src = "sprites/laserGreen.bmp";

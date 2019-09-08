@@ -21,34 +21,23 @@ class EnemySpawner {
     }
 }
 
-class Enemy {
+class Enemy extends MovableEntity {
 
-    private _position: Vector2D;
     private _heading: Vector2D;
-    private _speed: number = 4;
-    private _width: number;
-    private _height: number;
     outOfBounds: boolean = false;
 
-    get position() { return this._position; }
     static sprite: HTMLImageElement;
 
     constructor(position: Vector2D, width: number = 30, height: number = 30) {
-        this._position = position;
-        this._width = width;
-        this._height = height;
+        super(position, width, height);
+        this._speed = 4;
         this.setNewHeading();
     }
 
     draw() {
-        this.updatePosition();
+        this.updatePosition(this._heading);
         this.clampToCanvas();
-        acContext.drawImage(Enemy.sprite, this._position.x, this._position.y, this._width, this._height);
-    }
-
-    updatePosition() {
-        this._position.add(this._heading);
-        console.log(this._heading);
+        super.draw(acContext, Enemy.sprite);
     }
 
     setNewHeading() {

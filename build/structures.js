@@ -34,4 +34,18 @@ class Collider {
     }
     get extents() { return this._extents; }
 }
+class MovableEntity {
+    constructor(position, width, height) {
+        this._position = position;
+        this._width = width;
+        this._height = height;
+    }
+    get position() { return this._position; }
+    updatePosition(direction) {
+        this._position.add(direction);
+    }
+    draw(context, sprite = this._sprite) {
+        context.drawImage(sprite, this._position.x, this._position.y, this._width, this._height);
+    }
+}
 //# sourceMappingURL=structures.js.map
