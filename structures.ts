@@ -8,6 +8,10 @@ class Vector2D {
         this.y = y;
     }
 
+    static getRandom() : Vector2D {
+        return new Vector2D(Math.random() * 2 - 1, Math.random() * 2 - 1);
+    }
+
     add(otherVector: Vector2D) {
         this.x += otherVector.x;
         this.y += otherVector.y;
@@ -40,7 +44,7 @@ class Collider {
 
     readonly _extents: Vector2D;
     readonly _owner: MovableEntity;
-    checkedThisFrame : boolean = false;
+    checkedThisFrame: boolean = false;
 
     get topLeftCorner(): Vector2D {
         return new Vector2D(this._owner.position.x - this._extents.x,
@@ -101,7 +105,7 @@ class Collider {
         this._owner.collidedWith = otherCollider;
         otherCollider._owner.collided = true;
         otherCollider._owner.collidedWith = this;
-        
+
     }
 }
 
@@ -113,9 +117,9 @@ class MovableEntity {
     protected _speed: number;
     protected _actorType: ActorType;
     protected readonly _collider: Collider;
-    outOfBounds : boolean = false;
-    collided : boolean = false; //this keeps track of only fatal collisions
-    collidedWith : Collider; //change to array if handling more than one collision is required in the future (e.g. enemies bouncing off each other)
+    outOfBounds: boolean = false;
+    collided: boolean = false; //this keeps track of only fatal collisions
+    collidedWith: Collider; //change to array if handling more than one collision is required in the future (e.g. enemies bouncing off each other)
 
     get position(): Vector2D { return this._position; }
     get collider(): Collider { return this._collider; }
@@ -144,6 +148,6 @@ class MovableEntity {
     }
 
     destroy() {
-        
+
     }
 }

@@ -69,6 +69,12 @@ class Enemy extends MovableEntity {
             this.setNewHeading();
         }
     }
+
+    destroy() {
+        if (this.collided) {
+            game.projectileLayer.addEmitter(new ParticleEmitter<WhiteSquareParticle>(WhiteSquareParticle, this._position, 10));
+        }
+    }
 }
 
 //static initialization

@@ -2,6 +2,10 @@ class ProjectileLayer {
     constructor() {
         this.projectiles = new Array();
         this.canShoot = true;
+        this._emitters = new Array();
+    }
+    addEmitter(emitter) {
+        this._emitters.push(emitter);
     }
     addprojectile(position) {
         if (!this.canShoot) {
@@ -17,6 +21,12 @@ class ProjectileLayer {
         });
         this.projectiles = this.projectiles.filter(function (value) {
             return value.outOfBounds == false && value.collided == false;
+        });
+        this._emitters.forEach(emitter => {
+            emitter.draw();
+        });
+        this._emitters = this._emitters.filter(function (emitter) {
+            return emitter.active;
         });
     }
 }

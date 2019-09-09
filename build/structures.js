@@ -4,6 +4,9 @@ class Vector2D {
         this.x = x;
         this.y = y;
     }
+    static getRandom() {
+        return new Vector2D(Math.random() * 2 - 1, Math.random() * 2 - 1);
+    }
     add(otherVector) {
         this.x += otherVector.x;
         this.y += otherVector.y;

@@ -11,15 +11,6 @@ const acContext = actorCanvas.getContext("2d");
 const canvasWidth = 800;
 const canvasHeight = 600;
 var game;
-//set canvas dimensions for client
-actorCanvas.width = canvasWidth;
-actorCanvas.height = canvasHeight;
-farBackgroundCanvas.width = canvasWidth;
-farBackgroundCanvas.height = canvasHeight;
-nearBackgroundCanvas.width = canvasWidth;
-nearBackgroundCanvas.height = canvasHeight;
-projectileCanvas.width = canvasWidth;
-projectileCanvas.height = canvasHeight;
 //start drawing the logo
 fcContext.beginPath();
 fcContext.rect(0, 0, canvasWidth, canvasHeight);

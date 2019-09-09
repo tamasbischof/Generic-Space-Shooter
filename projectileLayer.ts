@@ -2,6 +2,11 @@ class ProjectileLayer {
 
     private projectiles: Array<Projectile> = new Array<Projectile>();
     private canShoot: boolean = true;
+    private _emitters: Array<IParticleEmitter> = new Array<IParticleEmitter>();
+
+    addEmitter(emitter: IParticleEmitter) {
+        this._emitters.push(emitter);
+    }
 
     addprojectile(position: Vector2D) {
         if (!this.canShoot) { return; }
@@ -17,7 +22,14 @@ class ProjectileLayer {
         this.projectiles = this.projectiles.filter(
             function (value) {
                 return value.outOfBounds == false && value.collided == false;
-            });
+        });
+        this._emitters.forEach(emitter => {
+            emitter.draw();
+        });
+        this._emitters = this._emitters.filter(
+            function (emitter) { 
+                return emitter.active;
+        });
     }
 }
 
