@@ -28,6 +28,9 @@ class ProjectileLayer {
         this._emitters = this._emitters.filter(function (emitter) {
             return emitter.active;
         });
+        if (this._emitters.length == 0 && game.player.destroyed) {
+            game._gameOver = true;
+        }
     }
 }
 class Projectile extends MovableEntity {

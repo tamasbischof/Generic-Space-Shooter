@@ -39,8 +39,7 @@ function drawLogo() {
     }
     if (alpha <= 0) {
         //animation complete, proceed to menu
-        this.game = new Game();
-        game.start();
+        new Menu();
         acContext.globalAlpha = 1;
         return;
     }

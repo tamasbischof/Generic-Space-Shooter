@@ -2,6 +2,8 @@ class Game {
     constructor() {
         this._lastFrameTimeStamp = 0;
         this._currentFrameTimeStamp = 0;
+        this._gameOver = false;
+        //start draw loop
         window.requestAnimationFrame((timeStamp) => this.draw(timeStamp));
     }
     get player() { return this._player; }
@@ -15,8 +17,11 @@ class Game {
         this._player = new Player();
         this._enemySpawner = new EnemySpawner();
     }
-    //start draw loop
     draw(time) {
+        if (this._gameOver) {
+            new GameOver();
+            return;
+        }
         fcContext.clearRect(0, 0, canvasWidth, canvasHeight);
         ncContext.clearRect(0, 0, canvasWidth, canvasHeight);
         pcContext.clearRect(0, 0, canvasWidth, canvasHeight);

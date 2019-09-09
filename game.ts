@@ -5,8 +5,9 @@ class Game {
     private _projectileLayer: ProjectileLayer;
     private _enemySpawner: EnemySpawner;
     private _collisionChecker: CollisionChecker;
-    private _lastFrameTimeStamp : number = 0;
-    private _currentFrameTimeStamp : number = 0;
+    private _lastFrameTimeStamp: number = 0;
+    private _currentFrameTimeStamp: number = 0;
+    _gameOver: boolean = false;
 
     public get player(): Player { return this._player; }
     public get collisionChecker(): CollisionChecker { return this._collisionChecker; }
@@ -14,6 +15,7 @@ class Game {
     public get deltaTime(): number { return (this._currentFrameTimeStamp - this._lastFrameTimeStamp) / 1000; } //time elapsed since last frame in seconds
 
     constructor() {
+        //start draw loop
         window.requestAnimationFrame((timeStamp) => this.draw(timeStamp));
     }
 
@@ -24,9 +26,11 @@ class Game {
         this._player = new Player();
         this._enemySpawner = new EnemySpawner();
     }
-
-    //start draw loop
-    draw(time : number) {
+    draw(time: number) {
+        if (this._gameOver) {
+            new GameOver();
+            return;
+        }
         fcContext.clearRect(0, 0, canvasWidth, canvasHeight);
         ncContext.clearRect(0, 0, canvasWidth, canvasHeight);
         pcContext.clearRect(0, 0, canvasWidth, canvasHeight);
