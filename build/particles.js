@@ -21,6 +21,45 @@ class ParticleEmitter {
             this._active = false;
         }
     }
+    disable() {
+        this._active = false;
+    }
+}
+class ContinousParticleEmitter {
+    constructor(type, maxCount) {
+        this._active = true;
+        this._maxCount = maxCount;
+        this._particles = new Array(maxCount);
+        this._type = type;
+        for (let i = 0; i < this._particles.length; i++) {
+            //spread particles accross the screen
+            this._particles[i] = this.createNewParticle();
+        }
+    }
+    get active() { return this._active; }
+    createNewParticle() {
+        let position = Vector2D.getRandom();
+        position.x *= canvasWidth;
+        position.y *= canvasHeight;
+        return new this._type(position);
+    }
+    draw() {
+        this._particles.forEach(particle => {
+            particle.draw();
+        });
+        this._particles = this._particles.filter(function (value) { return value.expired == false; });
+        if (this._particles.length < this._maxCount) {
+            for (let i = this._particles.length; i < this._maxCount; i++) {
+                this._particles.push(this.createNewParticle());
+            }
+        }
+        else {
+            this._active = false;
+        }
+    }
+    disable() {
+        this._active = false;
+    }
 }
 class Particle {
     constructor(sprite, startPosition) {
@@ -63,4 +102,33 @@ class WhiteSquareParticle extends Particle {
 }
 WhiteSquareParticle.sprite = new Image();
 WhiteSquareParticle.sprite.src = "sprites/whiteSquare.bmp";
+class StarParticle extends Particle {
+    constructor(startPosition) {
+        super(StarParticle.sprite, startPosition);
+        this.currentAlpha = 1;
+        this.degradation = 0.02;
+        this._lifeTime = 2;
+        this._delay = Math.random();
+        this._expired = false;
+    }
+    updatePosition() {
+    }
+    draw() {
+        this._delay -= this.degradation;
+        if (this._delay > 0) {
+            return;
+        }
+        this.currentAlpha -= this.degradation;
+        if (this.currentAlpha <= 0) {
+            this._expired = true;
+            return;
+        }
+        pcContext.save();
+        pcContext.globalAlpha = this.currentAlpha;
+        pcContext.drawImage(this._sprite, this._position.x, this._position.y);
+        pcContext.restore();
+    }
+}
+StarParticle.sprite = new Image();
+StarParticle.sprite.src = "sprites/starSmall.bmp";
 //# sourceMappingURL=particles.js.map

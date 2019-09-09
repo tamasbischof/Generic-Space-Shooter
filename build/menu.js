@@ -7,13 +7,14 @@ class Menu {
         ncContext.clearRect(0, 0, canvasWidth, canvasHeight);
         pcContext.clearRect(0, 0, canvasWidth, canvasHeight);
         acContext.clearRect(0, 0, canvasWidth, canvasHeight);
-        fcContext.fillStyle = "#FFFFFF";
+        fcContext.fillStyle = "#000000";
         fcContext.fillRect(0, 0, canvasWidth, canvasHeight);
         this._buttons[0] = new MenuButton(MenuButton.game1Button, 250, () => this.startGame());
         this._buttons[1] = new MenuButton(MenuButton.game2Button, 330, () => this.startGame());
         this._buttons[2] = new MenuButton(MenuButton.game3Button, 410, () => this.startGame());
         this._buttons[3] = new MenuButton(MenuButton.exitButton, 490, () => this.exit());
         this._canvasRect = actorCanvas.getBoundingClientRect();
+        this._particleEmitter = new ContinousParticleEmitter(StarParticle, 15);
         actorCanvas.addEventListener('click', this._clickHandler);
         window.requestAnimationFrame(() => this.draw());
     }
@@ -21,6 +22,7 @@ class Menu {
         if (this._buttonClicked) {
             return;
         }
+        pcContext.clearRect(0, 0, canvasWidth, canvasHeight);
         acContext.clearRect(0, 0, canvasWidth, canvasHeight);
         //draw the logo
         acContext.drawImage(Menu.logo, canvasWidth / 2 - Menu.logo.width / 2, 50);
@@ -28,6 +30,8 @@ class Menu {
         this._buttons.forEach(button => {
             button.draw();
         });
+        //draw particle effect
+        this._particleEmitter.draw();
         window.requestAnimationFrame(() => this.draw());
     }
     checkClick(event) {
