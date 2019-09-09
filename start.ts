@@ -50,6 +50,7 @@ function drawLogo() {
     if (alpha <= 0) {
         //animation complete, proceed to menu
         this.game = new Game();
+        game.start();
         acContext.globalAlpha = 1;
         return;
     }

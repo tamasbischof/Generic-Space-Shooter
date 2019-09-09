@@ -3,7 +3,6 @@ class BackgroundLayer {
     private farBackgroundImg: HTMLImageElement;
     private nearBackgroundImg: HTMLImageElement;
     private farFillPattern: CanvasPattern;
-    private nearFillPattern: CanvasPattern;
     private farOffset: number = 0;
     private nearOffset: number = 0;
     private farSpeed: number = 1;
@@ -12,7 +11,6 @@ class BackgroundLayer {
     constructor() {
         this.nearBackgroundImg = new Image();
         this.nearBackgroundImg.src = "sprites/meteorBackground.bmp";
-        this.nearBackgroundImg.onload = () => { this.nearFillPattern = ncContext.createPattern(this.nearBackgroundImg, "repeat-x"); }
         this.farBackgroundImg = new Image();
         this.farBackgroundImg.src = "sprites/starBackground.bmp";
         this.farBackgroundImg.onload = () => { this.farFillPattern = fcContext.createPattern(this.farBackgroundImg, "repeat"); }

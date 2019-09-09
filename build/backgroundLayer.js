@@ -6,7 +6,6 @@ class BackgroundLayer {
         this.nearSpeed = 4;
         this.nearBackgroundImg = new Image();
         this.nearBackgroundImg.src = "sprites/meteorBackground.bmp";
-        this.nearBackgroundImg.onload = () => { this.nearFillPattern = ncContext.createPattern(this.nearBackgroundImg, "repeat-x"); };
         this.farBackgroundImg = new Image();
         this.farBackgroundImg.src = "sprites/starBackground.bmp";
         this.farBackgroundImg.onload = () => { this.farFillPattern = fcContext.createPattern(this.farBackgroundImg, "repeat"); };

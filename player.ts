@@ -9,18 +9,16 @@ class Player extends MovableEntity {
         this._height = height;
         this._sprite = new Image();
         this._sprite.src = "sprites/player.bmp";
+        this._actorType = ActorType.Player;
         window.addEventListener('keydown', (e) => { this._input.handleKeyDown(e); });
         window.addEventListener('keyup', (e) => { this._input.handleKeyUp(e); });
     }
     
     draw() {
         this._input.handleInput();
+        this.clampToCanvas(); 
+        this.resolveCollision();
         super.draw(acContext);
-    }
-    
-    updatePosition(direction : Vector2D) {
-        this._position.add(direction);
-        this.clampToCanvas();       
     }
     
     shootProjectile() {

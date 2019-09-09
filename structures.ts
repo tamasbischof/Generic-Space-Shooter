@@ -35,15 +35,73 @@ enum ActorType {
     Projectile
 }
 
-/**denotes a rectangle-shaped collider */
+/**Denotes a rectangle-shaped collider */
 class Collider {
 
-    private _extents: Vector2D;
+    readonly _extents: Vector2D;
+    readonly _owner: MovableEntity;
+    checkedThisFrame : boolean = false;
 
-    get extents(): Vector2D { return this._extents; }
+    get topLeftCorner(): Vector2D {
+        return new Vector2D(this._owner.position.x - this._extents.x,
+            this._owner.position.y - this._extents.y);
+    }
 
-    constructor(extents: Vector2D) {
+    get bottomRightCorner(): Vector2D {
+        return new Vector2D(this._owner.position.x + this._extents.x,
+            this._owner.position.y + this._extents.y);
+    }
+
+    constructor(extents: Vector2D, owner: MovableEntity) {
+        this._owner = owner;
         this._extents = extents;
+        game.collisionChecker.registerCollider(this);
+    }
+
+    checkOverLap(otherCollider: Collider) {
+        this.checkedThisFrame = true;
+        //check if the collision matters
+        switch (this._owner.actorType) {
+            case ActorType.Projectile:
+                if (otherCollider._owner.actorType == ActorType.Player ||
+                    otherCollider._owner.actorType == ActorType.Projectile) {
+                    return;
+                }
+                break;
+            case ActorType.Enemy:
+                if (otherCollider._owner.actorType == ActorType.Enemy) {
+                    return;
+                }
+                break;
+            case ActorType.Player:
+                if (otherCollider._owner.actorType == ActorType.Player ||
+                    otherCollider._owner.actorType == ActorType.Projectile) {
+                    return;
+                }
+                break;
+        }
+        let topLeft = this.topLeftCorner;
+        let botRight = this.bottomRightCorner;
+        let otherTopLeft = otherCollider.topLeftCorner;
+        let otherBotRight = otherCollider.bottomRightCorner;
+
+        //check if a collision happened
+        //check if one is to the right of the other - no overlap in this case
+        if (topLeft.x > otherBotRight.x ||
+            otherTopLeft.x > botRight.x) {
+            return;
+        }
+        //check if one is positioned below the other (remember, canvas y-axis is "flipped"), no overlap in this case either
+        if (topLeft.y > otherBotRight.y ||
+            otherTopLeft.y > botRight.y) {
+            return;
+        }
+        //otherwise mark both as handled
+        this._owner.collided = true;
+        this._owner.collidedWith = otherCollider;
+        otherCollider._owner.collided = true;
+        otherCollider._owner.collidedWith = this;
+        
     }
 }
 
@@ -53,20 +111,39 @@ class MovableEntity {
     protected _width: number;
     protected _height: number;
     protected _speed: number;
+    protected _actorType: ActorType;
+    protected readonly _collider: Collider;
+    outOfBounds : boolean = false;
+    collided : boolean = false; //this keeps track of only fatal collisions
+    collidedWith : Collider; //change to array if handling more than one collision is required in the future (e.g. enemies bouncing off each other)
 
     get position(): Vector2D { return this._position; }
+    get collider(): Collider { return this._collider; }
+    get actorType(): ActorType { return this._actorType; }
 
     protected constructor(position: Vector2D, width: number, height: number) {
         this._position = position;
         this._width = width;
         this._height = height;
+        this._collider = new Collider(new Vector2D(width / 2, height / 2), this);
     }
 
     updatePosition(direction: Vector2D) {
         this._position.add(direction);
     }
 
-    draw(context : CanvasRenderingContext2D, sprite : HTMLImageElement = this._sprite) {
+    draw(context: CanvasRenderingContext2D, sprite: HTMLImageElement = this._sprite) {
         context.drawImage(sprite, this._position.x, this._position.y, this._width, this._height);
+    }
+
+    resolveCollision() {
+        if (!this.collided) return;
+        else {
+            this.destroy();
+        }
+    }
+
+    destroy() {
+        
     }
 }

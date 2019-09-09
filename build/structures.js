@@ -27,25 +27,90 @@ var ActorType;
     ActorType[ActorType["Enemy"] = 1] = "Enemy";
     ActorType[ActorType["Projectile"] = 2] = "Projectile";
 })(ActorType || (ActorType = {}));
-/**denotes a rectangle-shaped collider */
+/**Denotes a rectangle-shaped collider */
 class Collider {
-    constructor(extents) {
+    constructor(extents, owner) {
+        this.checkedThisFrame = false;
+        this._owner = owner;
         this._extents = extents;
+        game.collisionChecker.registerCollider(this);
     }
-    get extents() { return this._extents; }
+    get topLeftCorner() {
+        return new Vector2D(this._owner.position.x - this._extents.x, this._owner.position.y - this._extents.y);
+    }
+    get bottomRightCorner() {
+        return new Vector2D(this._owner.position.x + this._extents.x, this._owner.position.y + this._extents.y);
+    }
+    checkOverLap(otherCollider) {
+        this.checkedThisFrame = true;
+        //check if the collision matters
+        switch (this._owner.actorType) {
+            case ActorType.Projectile:
+                if (otherCollider._owner.actorType == ActorType.Player ||
+                    otherCollider._owner.actorType == ActorType.Projectile) {
+                    return;
+                }
+                break;
+            case ActorType.Enemy:
+                if (otherCollider._owner.actorType == ActorType.Enemy) {
+                    return;
+                }
+                break;
+            case ActorType.Player:
+                if (otherCollider._owner.actorType == ActorType.Player ||
+                    otherCollider._owner.actorType == ActorType.Projectile) {
+                    return;
+                }
+                break;
+        }
+        let topLeft = this.topLeftCorner;
+        let botRight = this.bottomRightCorner;
+        let otherTopLeft = otherCollider.topLeftCorner;
+        let otherBotRight = otherCollider.bottomRightCorner;
+        //check if a collision happened
+        //check if one is to the right of the other - no overlap in this case
+        if (topLeft.x > otherBotRight.x ||
+            otherTopLeft.x > botRight.x) {
+            return;
+        }
+        //check if one is positioned below the other (remember, canvas y-axis is "flipped"), no overlap in this case either
+        if (topLeft.y > otherBotRight.y ||
+            otherTopLeft.y > botRight.y) {
+            return;
+        }
+        //otherwise mark both as handled
+        this._owner.collided = true;
+        this._owner.collidedWith = otherCollider;
+        otherCollider._owner.collided = true;
+        otherCollider._owner.collidedWith = this;
+    }
 }
 class MovableEntity {
     constructor(position, width, height) {
+        this.outOfBounds = false;
+        this.collided = false; //this keeps track of only fatal collisions
         this._position = position;
         this._width = width;
         this._height = height;
+        this._collider = new Collider(new Vector2D(width / 2, height / 2), this);
     }
     get position() { return this._position; }
+    get collider() { return this._collider; }
+    get actorType() { return this._actorType; }
     updatePosition(direction) {
         this._position.add(direction);
     }
     draw(context, sprite = this._sprite) {
         context.drawImage(sprite, this._position.x, this._position.y, this._width, this._height);
+    }
+    resolveCollision() {
+        if (!this.collided)
+            return;
+        else {
+            this.destroy();
+        }
+    }
+    destroy() {
     }
 }
 //# sourceMappingURL=structures.js.map

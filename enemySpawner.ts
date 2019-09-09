@@ -16,27 +16,28 @@ class EnemySpawner {
             enemy.draw();
         });
         this.enemies = this.enemies.filter(function (value) {
-            return value.outOfBounds == false;
-        })
+            return value.outOfBounds === false && value.collided === false;
+        });
     }
 }
 
 class Enemy extends MovableEntity {
 
     private _heading: Vector2D;
-    outOfBounds: boolean = false;
 
     static sprite: HTMLImageElement;
 
     constructor(position: Vector2D, width: number = 30, height: number = 30) {
         super(position, width, height);
         this._speed = 4;
+        this._actorType = ActorType.Enemy;
         this.setNewHeading();
     }
 
     draw() {
         this.updatePosition(this._heading);
         this.clampToCanvas();
+        this.resolveCollision();
         super.draw(acContext, Enemy.sprite);
     }
 
@@ -56,6 +57,8 @@ class Enemy extends MovableEntity {
     clampToCanvas() {
         if (this._position.x <= 0 - this._width) {
             this.outOfBounds = true;
+            this.destroy();
+            return;
         }
         if (this._position.y >= canvasHeight - this._height) {
             this._position.y = canvasHeight - this._height;
