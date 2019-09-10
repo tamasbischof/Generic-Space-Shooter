@@ -52,13 +52,13 @@ class Projectile extends MovableEntity {
 
     draw() {
         this.updatePosition(this._heading);
-        if (this.position.x > canvasWidth) {
+        if (this.position.x > Canvases.canvasWidth) {
             this.outOfBounds = true;
             this.destroy();
             return;
         }
         this.resolveCollision();
-        super.draw(pcContext, Projectile.sprite);
+        super.draw(Canvases.pcContext, Projectile.sprite);
     }
 }
 

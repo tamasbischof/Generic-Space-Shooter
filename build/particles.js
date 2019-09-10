@@ -39,8 +39,8 @@ class ContinousParticleEmitter {
     get active() { return this._active; }
     createNewParticle() {
         let position = Vector2D.getRandom();
-        position.x *= canvasWidth;
-        position.y *= canvasHeight;
+        position.x *= Canvases.canvasWidth;
+        position.y *= Canvases.canvasHeight;
         return new this._type(position);
     }
     draw() {
@@ -70,7 +70,7 @@ class Particle {
     get expired() { return this._expired; }
     draw() {
         this.updatePosition();
-        pcContext.drawImage(this._sprite, this._position.x, this._position.y);
+        Canvases.pcContext.drawImage(this._sprite, this._position.x, this._position.y);
     }
 }
 class WhiteSquareParticle extends Particle {
@@ -94,10 +94,10 @@ class WhiteSquareParticle extends Particle {
             this._expired = true;
             return;
         }
-        pcContext.save();
-        pcContext.globalAlpha = this.currentAlpha;
-        pcContext.drawImage(this._sprite, this._position.x, this._position.y);
-        pcContext.restore();
+        Canvases.pcContext.save();
+        Canvases.pcContext.globalAlpha = this.currentAlpha;
+        Canvases.pcContext.drawImage(this._sprite, this._position.x, this._position.y);
+        Canvases.pcContext.restore();
     }
 }
 WhiteSquareParticle.sprite = new Image();
@@ -123,10 +123,10 @@ class StarParticle extends Particle {
             this._expired = true;
             return;
         }
-        pcContext.save();
-        pcContext.globalAlpha = this.currentAlpha;
-        pcContext.drawImage(this._sprite, this._position.x, this._position.y);
-        pcContext.restore();
+        Canvases.pcContext.save();
+        Canvases.pcContext.globalAlpha = this.currentAlpha;
+        Canvases.pcContext.drawImage(this._sprite, this._position.x, this._position.y);
+        Canvases.pcContext.restore();
     }
 }
 StarParticle.sprite = new Image();

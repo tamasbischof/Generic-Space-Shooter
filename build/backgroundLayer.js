@@ -8,16 +8,16 @@ class BackgroundLayer {
         this.nearBackgroundImg.src = "sprites/meteorBackground.bmp";
         this.farBackgroundImg = new Image();
         this.farBackgroundImg.src = "sprites/starBackground.bmp";
-        this.farBackgroundImg.onload = () => { this.farFillPattern = fcContext.createPattern(this.farBackgroundImg, "repeat"); };
+        this.farBackgroundImg.onload = () => { this.farFillPattern = Canvases.fcContext.createPattern(this.farBackgroundImg, "repeat"); };
     }
     calculateOffset() {
-        if (this.nearOffset < canvasWidth + this.nearBackgroundImg.width) {
+        if (this.nearOffset < Canvases.canvasWidth + this.nearBackgroundImg.width) {
             this.nearOffset += this.nearSpeed;
         }
         else {
             this.nearOffset = 0;
         }
-        if (this.farOffset < canvasWidth + this.farBackgroundImg.width) {
+        if (this.farOffset < Canvases.canvasWidth + this.farBackgroundImg.width) {
             this.farOffset += this.farSpeed;
         }
         else {
@@ -30,21 +30,21 @@ class BackgroundLayer {
         this.drawNear();
     }
     drawFar() {
-        fcContext.fillStyle = this.farFillPattern;
-        fcContext.save();
-        fcContext.translate(-this.farOffset, 0);
-        fcContext.fill();
-        fcContext.restore();
+        Canvases.fcContext.fillStyle = this.farFillPattern;
+        Canvases.fcContext.save();
+        Canvases.fcContext.translate(-this.farOffset, 0);
+        Canvases.fcContext.fill();
+        Canvases.fcContext.restore();
     }
     drawNear() {
-        // ncContext.fillStyle = this.nearFillPattern;
-        // ncContext.save();
-        // ncContext.translate(-this.nearOffset, 0);
-        // ncContext.fill();
-        // ncContext.restore();
-        ncContext.drawImage(this.nearBackgroundImg, canvasWidth - this.nearOffset, 0);
-        ncContext.drawImage(this.nearBackgroundImg, 0 - this.nearOffset, 0);
-        ncContext.drawImage(this.nearBackgroundImg, canvasWidth * 2 - this.nearOffset, 0);
+        // Canvases.ncContext.fillStyle = this.nearFillPattern;
+        // Canvases.ncContext.save();
+        // Canvases.ncContext.translate(-this.nearOffset, 0);
+        // Canvases.ncContext.fill();
+        // Canvases.ncContext.restore();
+        Canvases.ncContext.drawImage(this.nearBackgroundImg, Canvases.canvasWidth - this.nearOffset, 0);
+        Canvases.ncContext.drawImage(this.nearBackgroundImg, 0 - this.nearOffset, 0);
+        Canvases.ncContext.drawImage(this.nearBackgroundImg, Canvases.canvasWidth * 2 - this.nearOffset, 0);
     }
 }
 //# sourceMappingURL=backgroundLayer.js.map

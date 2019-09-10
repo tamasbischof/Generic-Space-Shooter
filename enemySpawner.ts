@@ -7,7 +7,7 @@ class EnemySpawner {
     }
 
     spawnEnemy() {
-        this.enemies.push(new Enemy(new Vector2D(canvasWidth, Math.random() * canvasHeight)));
+        this.enemies.push(new Enemy(new Vector2D(Canvases.canvasWidth, Math.random() * Canvases.canvasHeight)));
         window.setTimeout(() => this.spawnEnemy(), 2000);
     }
 
@@ -38,12 +38,12 @@ class Enemy extends MovableEntity {
         this.updatePosition(this._heading);
         this.clampToCanvas();
         this.resolveCollision();
-        super.draw(acContext, Enemy.sprite);
+        super.draw(Canvases.acContext, Enemy.sprite);
     }
 
     setNewHeading() {
         //when on upper half
-        if (this._position.y < canvasHeight / 2) {
+        if (this._position.y < Canvases.canvasHeight / 2) {
             this._heading = new Vector2D(-1, Math.random());
         }
         //when on lower half
@@ -60,8 +60,8 @@ class Enemy extends MovableEntity {
             this.destroy();
             return;
         }
-        if (this._position.y >= canvasHeight - this._height) {
-            this._position.y = canvasHeight - this._height;
+        if (this._position.y >= Canvases.canvasHeight - this._height) {
+            this._position.y = Canvases.canvasHeight - this._height;
             this.setNewHeading();
         }
         if (this._position.y <= 0) {

@@ -3,29 +3,29 @@ class Menu {
         this._buttons = new Array(4);
         this._buttonClicked = false;
         this._clickHandler = (event) => this.checkClick(event);
-        fcContext.clearRect(0, 0, canvasWidth, canvasHeight);
-        ncContext.clearRect(0, 0, canvasWidth, canvasHeight);
-        pcContext.clearRect(0, 0, canvasWidth, canvasHeight);
-        acContext.clearRect(0, 0, canvasWidth, canvasHeight);
-        fcContext.fillStyle = "#000000";
-        fcContext.fillRect(0, 0, canvasWidth, canvasHeight);
+        Canvases.fcContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
+        Canvases.ncContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
+        Canvases.pcContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
+        Canvases.acContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
+        Canvases.fcContext.fillStyle = "#000000";
+        Canvases.fcContext.fillRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
         this._buttons[0] = new MenuButton(MenuButton.game1Button, 250, () => this.startGame());
         this._buttons[1] = new MenuButton(MenuButton.game2Button, 330, () => this.startGame());
         this._buttons[2] = new MenuButton(MenuButton.game3Button, 410, () => this.startGame());
         this._buttons[3] = new MenuButton(MenuButton.exitButton, 490, () => this.exit());
-        this._canvasRect = actorCanvas.getBoundingClientRect();
+        this._canvasRect = Canvases.actorCanvas.getBoundingClientRect();
         this._particleEmitter = new ContinousParticleEmitter(StarParticle, 15);
-        actorCanvas.addEventListener('click', this._clickHandler);
+        Canvases.actorCanvas.addEventListener('click', this._clickHandler);
         window.requestAnimationFrame(() => this.draw());
     }
     draw() {
         if (this._buttonClicked) {
             return;
         }
-        pcContext.clearRect(0, 0, canvasWidth, canvasHeight);
-        acContext.clearRect(0, 0, canvasWidth, canvasHeight);
+        Canvases.pcContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
+        Canvases.acContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
         //draw the logo
-        acContext.drawImage(Menu.logo, canvasWidth / 2 - Menu.logo.width / 2, 50);
+        Canvases.acContext.drawImage(Menu.logo, Canvases.canvasWidth / 2 - Menu.logo.width / 2, 50);
         //draw the buttons
         this._buttons.forEach(button => {
             button.draw();
@@ -42,23 +42,23 @@ class Menu {
         });
     }
     startGame() {
+        this.deregisterListener();
         game = new Game();
         game.start();
-        this.deregisterListener();
     }
     exit() {
-        window.location.href = "http://bischoftamas.com";
         this.deregisterListener();
+        window.location.href = "http://bischoftamas.com";
     }
     deregisterListener() {
-        actorCanvas.removeEventListener('click', this._clickHandler);
+        Canvases.actorCanvas.removeEventListener('click', this._clickHandler);
     }
 }
 class MenuButton {
     constructor(sprite, yPos, action) {
         this._sprite = sprite;
         this._action = action;
-        let xPos = canvasWidth / 2 - sprite.width / 2;
+        let xPos = Canvases.canvasWidth / 2 - sprite.width / 2;
         this._topLeftCorner = new Vector2D(xPos, yPos);
         this._bottomRightCorner = new Vector2D(xPos + sprite.width, yPos + sprite.height);
     }
@@ -71,7 +71,7 @@ class MenuButton {
         return true;
     }
     draw() {
-        acContext.drawImage(this._sprite, this._topLeftCorner.x, this._topLeftCorner.y);
+        Canvases.acContext.drawImage(this._sprite, this._topLeftCorner.x, this._topLeftCorner.y);
     }
 }
 //load bitmaps
@@ -91,28 +91,28 @@ class GameOver {
         this.lingerDuration = 3;
         this.gameOverGraphic = new Image();
         this.currentAlpha = 0;
-        pcContext.clearRect(0, 0, canvasWidth, canvasHeight);
-        acContext.clearRect(0, 0, canvasWidth, canvasHeight);
+        Canvases.pcContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
+        Canvases.acContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
         this.gameOverGraphic.src = "sprites/gameOver.bmp";
         window.requestAnimationFrame(() => this.draw());
     }
     draw() {
-        acContext.clearRect(0, 0, canvasWidth, canvasHeight);
+        Canvases.acContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
         this.currentAlpha += game.deltaTime / this.fadeDuration;
-        acContext.globalAlpha = this.currentAlpha;
+        Canvases.acContext.globalAlpha = this.currentAlpha;
         if (this.currentAlpha >= 1) {
             this.fadeDuration = -this.fadeDuration;
             window.setTimeout(() => this.draw(), this.lingerDuration * 1000);
-            acContext.drawImage(this.gameOverGraphic, 0, 0);
+            Canvases.acContext.drawImage(this.gameOverGraphic, 0, 0);
             return;
         }
         if (this.currentAlpha <= 0) {
-            acContext.globalAlpha = 1;
+            Canvases.acContext.globalAlpha = 1;
             new Menu();
             return;
         }
         console.log(this.gameOverGraphic);
-        acContext.drawImage(this.gameOverGraphic, 0, 0);
+        Canvases.acContext.drawImage(this.gameOverGraphic, 0, 0);
         window.requestAnimationFrame(() => this.draw());
     }
 }

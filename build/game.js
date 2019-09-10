@@ -22,10 +22,10 @@ class Game {
             new GameOver();
             return;
         }
-        fcContext.clearRect(0, 0, canvasWidth, canvasHeight);
-        ncContext.clearRect(0, 0, canvasWidth, canvasHeight);
-        pcContext.clearRect(0, 0, canvasWidth, canvasHeight);
-        acContext.clearRect(0, 0, canvasWidth, canvasHeight);
+        Canvases.fcContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
+        Canvases.ncContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
+        Canvases.pcContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
+        Canvases.acContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
         this.player.draw();
         this._lastFrameTimeStamp = this._currentFrameTimeStamp;
         this._currentFrameTimeStamp = time;
