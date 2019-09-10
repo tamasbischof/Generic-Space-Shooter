@@ -88,6 +88,34 @@ class Collider {
         otherCollider._owner.collidedWith = this;
     }
 }
+/**Performs collision checking on each registered Collider. Automatically removes Colliders whose owners are expired. A checkCollisions() call is required each frame to properly evaluate collisions.
+ * Use the registerCollider(Collider) method to add a Collider for checking.*/
+class CollisionChecker {
+    constructor() {
+        this._colliders = new Array();
+    }
+    /**Use to add a collider for collision checking */
+    registerCollider(collider) {
+        this._colliders.push(collider);
+    }
+    /**Call on frames that need collision checking. */
+    checkCollisions() {
+        this._colliders.forEach(function (collider) {
+            //check against each collider in the scene
+            this._colliders.forEach(function (otherCollider) {
+                //however, no need to check again if the collider has been checked already in an outer loop iteration
+                if (otherCollider.checkedThisFrame) {
+                    return;
+                }
+                collider.checkOverLap(otherCollider);
+            }.bind(this));
+            collider.checkedThisFrame = true;
+        }.bind(this));
+        //reset flags
+        this._colliders.forEach(collider => { collider.checkedThisFrame = false; });
+        this._colliders = this._colliders.filter(function (value) { return value._owner.collided == false && value._owner.outOfBounds == false; });
+    }
+}
 class MovableEntity {
     constructor(position, width, height) {
         this.outOfBounds = false;

@@ -1,3 +1,4 @@
+/**Static class that loads and provides reference to all canvas layers and drawing contexts. To avoid hard-coded values, canvas dimensions are stored here as well. */
 class Canvases {
     //store canvases and contexts
     static farBackgroundCanvas = <HTMLCanvasElement>document.getElementById("farBackgroundCanvas");

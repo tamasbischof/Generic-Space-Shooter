@@ -1,4 +1,11 @@
+/**Handles the emission of particles. Has a finite lifetime, only active while it has particles to animate. A draw() call is required each frame to properly emit particles.*/
 class ParticleEmitter {
+    /**
+     * Creates a new instance of this class.
+     * @param type A Particle type that has a Vector2D argument for its constructor.
+     * @param startPosition A Vector2D value to be passed for each particle.
+     * @param count Number of particles to emit.
+     */
     constructor(type, startPosition, count) {
         this._active = true;
         this._particles = new Array(count);
@@ -25,7 +32,13 @@ class ParticleEmitter {
         this._active = false;
     }
 }
+/**Handles the emission of particles. Has an infinite lifetime, and will emit particles until deactivated all across the canvas. A draw() call is required to properly animate the particles.*/
 class ContinousParticleEmitter {
+    /**
+     * Creates a new instance of this class.
+     * @param type A Particle type that has a Vector2D argument for its constructor.
+     * @param maxCount The maximum number of particles to be animated at any one time.
+     */
     constructor(type, maxCount) {
         this._active = true;
         this._maxCount = maxCount;
@@ -37,6 +50,7 @@ class ContinousParticleEmitter {
         }
     }
     get active() { return this._active; }
+    /**Instantiates a new particle. */
     createNewParticle() {
         let position = Vector2D.getRandom();
         position.x *= Canvases.canvasWidth;
@@ -53,17 +67,16 @@ class ContinousParticleEmitter {
                 this._particles.push(this.createNewParticle());
             }
         }
-        else {
-            this._active = false;
-        }
     }
+    /**Deactivates this emitter, stopping it from drawing any more particles. */
     disable() {
         this._active = false;
     }
 }
+/**Base class for all particles. */
 class Particle {
     constructor(sprite, startPosition) {
-        this._expired = false;
+        this._expired = false; //flag denoting if this particle has run its lifetime
         this._sprite = sprite;
         this._position = startPosition;
     }
@@ -73,6 +86,7 @@ class Particle {
         Canvases.pcContext.drawImage(this._sprite, this._position.x, this._position.y);
     }
 }
+/**A simple white square, moving away from its starting position in a random direction and fading out during its lifetime. */
 class WhiteSquareParticle extends Particle {
     constructor(startPosition) {
         super(WhiteSquareParticle.sprite, startPosition);
@@ -100,35 +114,39 @@ class WhiteSquareParticle extends Particle {
         Canvases.pcContext.restore();
     }
 }
+//keep a single copy of the particle sprite for better performance
 WhiteSquareParticle.sprite = new Image();
 WhiteSquareParticle.sprite.src = "sprites/whiteSquare.bmp";
+/**A star-shaped particle that fades out during its lifetime after a random delay. */
 class StarParticle extends Particle {
     constructor(startPosition) {
         super(StarParticle.sprite, startPosition);
-        this.currentAlpha = 1;
-        this.degradation = 0.02;
-        this._lifeTime = 2;
+        this._currentAlpha = 1;
+        this._degradation = 0.016;
+        this._lifeTime = 1.5;
         this._delay = Math.random();
         this._expired = false;
     }
     updatePosition() {
     }
     draw() {
-        this._delay -= this.degradation;
+        this._delay -= this._degradation;
         if (this._delay > 0) {
             return;
         }
-        this.currentAlpha -= this.degradation;
-        if (this.currentAlpha <= 0) {
+        this._currentAlpha -= this._degradation / this._lifeTime;
+        //after the animation is complete
+        if (this._currentAlpha <= 0) {
             this._expired = true;
             return;
         }
-        Canvases.pcContext.save();
-        Canvases.pcContext.globalAlpha = this.currentAlpha;
+        Canvases.pcContext.save(); //lower the opacity only for the current particle
+        Canvases.pcContext.globalAlpha = this._currentAlpha;
         Canvases.pcContext.drawImage(this._sprite, this._position.x, this._position.y);
         Canvases.pcContext.restore();
     }
 }
+//store the image in the class, not in each instance
 StarParticle.sprite = new Image();
 StarParticle.sprite.src = "sprites/starSmall.bmp";
 //# sourceMappingURL=particles.js.map

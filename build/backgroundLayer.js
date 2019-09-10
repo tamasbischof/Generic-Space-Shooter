@@ -1,38 +1,39 @@
+/**Handles drawing on the background layer, implements parallax scrolling. A draw() call has to be issued per frame.*/
 class BackgroundLayer {
     constructor() {
-        this.farOffset = 0;
-        this.nearOffset = 0;
-        this.farSpeed = 1;
-        this.nearSpeed = 4;
-        this.nearBackgroundImg = new Image();
-        this.nearBackgroundImg.src = "sprites/meteorBackground.bmp";
-        this.farBackgroundImg = new Image();
-        this.farBackgroundImg.src = "sprites/starBackground.bmp";
-        this.farBackgroundImg.onload = () => { this.farFillPattern = Canvases.fcContext.createPattern(this.farBackgroundImg, "repeat"); };
+        this._farOffset = 0; //keeps track where to draw the background pattern
+        this._nearOffset = 0;
+        this._farSpeed = 1; //how fast the background should move
+        this._nearSpeed = 4;
+        this._nearBackgroundImg = new Image();
+        this._nearBackgroundImg.src = "sprites/meteorBackground.bmp";
+        this._farBackgroundImg = new Image();
+        this._farBackgroundImg.src = "sprites/starBackground.bmp";
+        this._farBackgroundImg.onload = () => { this._farFillPattern = Canvases.fcContext.createPattern(this._farBackgroundImg, "repeat"); };
     }
-    calculateOffset() {
-        if (this.nearOffset < Canvases.canvasWidth + this.nearBackgroundImg.width) {
-            this.nearOffset += this.nearSpeed;
-        }
-        else {
-            this.nearOffset = 0;
-        }
-        if (this.farOffset < Canvases.canvasWidth + this.farBackgroundImg.width) {
-            this.farOffset += this.farSpeed;
-        }
-        else {
-            this.farOffset = 0;
-        }
-    }
-    drawAll() {
+    draw() {
         this.calculateOffset();
         this.drawFar();
         this.drawNear();
     }
+    calculateOffset() {
+        if (this._nearOffset < Canvases.canvasWidth + this._nearBackgroundImg.width) {
+            this._nearOffset += this._nearSpeed;
+        }
+        else {
+            this._nearOffset = 0;
+        }
+        if (this._farOffset < Canvases.canvasWidth + this._farBackgroundImg.width) {
+            this._farOffset += this._farSpeed;
+        }
+        else {
+            this._farOffset = 0;
+        }
+    }
     drawFar() {
-        Canvases.fcContext.fillStyle = this.farFillPattern;
+        Canvases.fcContext.fillStyle = this._farFillPattern;
         Canvases.fcContext.save();
-        Canvases.fcContext.translate(-this.farOffset, 0);
+        Canvases.fcContext.translate(-this._farOffset, 0);
         Canvases.fcContext.fill();
         Canvases.fcContext.restore();
     }
@@ -42,9 +43,9 @@ class BackgroundLayer {
         // Canvases.ncContext.translate(-this.nearOffset, 0);
         // Canvases.ncContext.fill();
         // Canvases.ncContext.restore();
-        Canvases.ncContext.drawImage(this.nearBackgroundImg, Canvases.canvasWidth - this.nearOffset, 0);
-        Canvases.ncContext.drawImage(this.nearBackgroundImg, 0 - this.nearOffset, 0);
-        Canvases.ncContext.drawImage(this.nearBackgroundImg, Canvases.canvasWidth * 2 - this.nearOffset, 0);
+        Canvases.ncContext.drawImage(this._nearBackgroundImg, Canvases.canvasWidth - this._nearOffset, 0);
+        Canvases.ncContext.drawImage(this._nearBackgroundImg, 0 - this._nearOffset, 0);
+        Canvases.ncContext.drawImage(this._nearBackgroundImg, Canvases.canvasWidth * 2 - this._nearOffset, 0);
     }
 }
 //# sourceMappingURL=backgroundLayer.js.map

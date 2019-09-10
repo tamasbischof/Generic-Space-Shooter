@@ -1,3 +1,4 @@
+/**Represents the player's ship. Needs a draw() call each frame. */
 class Player extends MovableEntity {
     constructor(width = 50, height = 50) {
         super(new Vector2D(0, Canvases.canvasHeight / 2), width, height);
@@ -29,6 +30,7 @@ class Player extends MovableEntity {
     shootProjectile() {
         game.projectileLayer.addprojectile(new Vector2D(this._position.x, this._position.y + this._height / 2));
     }
+    /**Keeps the player within the confines of the canvas. */
     clampToCanvas() {
         if (this._position.x > Canvases.canvasWidth - this._width) {
             this._position.x = Canvases.canvasWidth - this._width;
@@ -45,6 +47,41 @@ class Player extends MovableEntity {
     }
     destroy() {
         game.projectileLayer.addEmitter(new ParticleEmitter(WhiteSquareParticle, this._position, 10));
+    }
+}
+class InputHandler {
+    constructor(player, speed) {
+        this.keys = new Map();
+        this.player = player;
+        this.speed = speed;
+    }
+    handleKeyDown(evt) {
+        this.keys.set(evt.key.toLowerCase(), true);
+        evt.preventDefault();
+    }
+    handleKeyUp(evt) {
+        this.keys.set(evt.key.toLowerCase(), false);
+        evt.preventDefault();
+    }
+    //direction vector y components are reversed (0,0 is upper right corner)
+    handleInput() {
+        let direction = new Vector2D(0, 0);
+        if (this.keys.get("w") || this.keys.get("arrowup")) {
+            direction.y -= this.speed;
+        }
+        if (this.keys.get("s") || this.keys.get("arrowdown")) {
+            direction.y += this.speed;
+        }
+        if (this.keys.get("d") || this.keys.get("arrowright")) {
+            direction.x += this.speed;
+        }
+        if (this.keys.get("a") || this.keys.get("arrowleft")) {
+            direction.x -= this.speed;
+        }
+        if (this.keys.get(" ")) {
+            this.player.shootProjectile();
+        }
+        this.player.updatePosition(direction);
     }
 }
 //# sourceMappingURL=player.js.map

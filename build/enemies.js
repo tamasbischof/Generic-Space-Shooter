@@ -1,46 +1,43 @@
+/**Handles the spawning of enemies. Will spawn enemies  */
 class EnemySpawner {
-
-    private enemies: Array<Enemy> = new Array<Enemy>();
-
     constructor() {
+        this._enemies = new Array();
+        this._active = true;
         this.spawnEnemy();
     }
-
+    setActive(value) {
+        this._active = value;
+    }
     spawnEnemy() {
-        this.enemies.push(new Enemy(new Vector2D(Canvases.canvasWidth, Math.random() * Canvases.canvasHeight)));
+        if (!this._active) {
+            return; //stop spawning when deactivated
+        }
+        this._enemies.push(new Enemy(new Vector2D(Canvases.canvasWidth, Math.random() * Canvases.canvasHeight)));
         window.setTimeout(() => this.spawnEnemy(), 2000);
     }
-
     draw() {
-        this.enemies.forEach(enemy => {
+        this._enemies.forEach(enemy => {
             enemy.draw();
         });
-        this.enemies = this.enemies.filter(function (value) {
+        this._enemies = this._enemies.filter(function (value) {
             return value.outOfBounds === false && value.collided === false;
         });
     }
 }
-
+/**Represents an enemy for the player to shoot (or collide with). Needs a draw() call each frame to properly function. */
 class Enemy extends MovableEntity {
-
-    private _heading: Vector2D;
-
-    static sprite: HTMLImageElement;
-
-    constructor(position: Vector2D, width: number = 30, height: number = 30) {
+    constructor(position, width = 30, height = 30) {
         super(position, width, height);
         this._speed = 4;
         this._actorType = ActorType.Enemy;
         this.setNewHeading();
     }
-
     draw() {
         this.updatePosition(this._heading);
         this.clampToCanvas();
         this.resolveCollision();
         super.draw(Canvases.acContext, Enemy.sprite);
     }
-
     setNewHeading() {
         //when on upper half
         if (this._position.y < Canvases.canvasHeight / 2) {
@@ -53,7 +50,7 @@ class Enemy extends MovableEntity {
         this._heading.normalize();
         this._heading.scale(this._speed);
     }
-
+    /**Corrects position and assigns new heading if this entity would end up outside the canvas */
     clampToCanvas() {
         if (this._position.x <= 0 - this._width) {
             this.outOfBounds = true;
@@ -69,14 +66,13 @@ class Enemy extends MovableEntity {
             this.setNewHeading();
         }
     }
-
     destroy() {
         if (this.collided) {
-            game.projectileLayer.addEmitter(new ParticleEmitter<WhiteSquareParticle>(WhiteSquareParticle, this._position, 10));
+            game.projectileLayer.addEmitter(new ParticleEmitter(WhiteSquareParticle, this._position, 10));
         }
     }
 }
-
 //static initialization
 Enemy.sprite = new Image();
-Enemy.sprite.src = "sprites/enemyShip.bmp"
+Enemy.sprite.src = "sprites/enemyShip.bmp";
+//# sourceMappingURL=enemies.js.map
