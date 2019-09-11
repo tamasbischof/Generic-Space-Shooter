@@ -22,6 +22,10 @@ class Vector2D {
         this.y *= scalar;
     }
 
+    multiply(scalar: number) : Vector2D {
+        return new Vector2D(this.x * scalar, this.y * scalar);
+    }
+
     normalize() {
         let magnitude = this.magnitude;
         this.x /= magnitude;
@@ -164,7 +168,7 @@ class MovableEntity {
     }
 
     updatePosition(direction: Vector2D) {
-        this._position.add(direction);
+        this._position.add(direction.multiply(game.deltaTime));
     }
 
     draw(context: CanvasRenderingContext2D, sprite: HTMLImageElement = this._sprite) {

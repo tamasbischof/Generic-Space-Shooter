@@ -19,6 +19,7 @@ class Game {
         this._projectileLayer = new ProjectileLayer();
         this._player = new Player();
         this._enemySpawner = new EnemySpawner();
+        new GameSettings();
     }
     draw(time) {
         //abort draw call when the game is over
@@ -42,6 +43,9 @@ class Game {
         this._enemySpawner.draw();
         //fire next frame
         window.requestAnimationFrame((timeStamp) => this.draw(timeStamp));
+    }
+    setGameOver() {
+        this._gameOver = true;
     }
 }
 //# sourceMappingURL=game.js.map

@@ -17,7 +17,7 @@ class EnemySpawner {
             return; //stop spawning when deactivated
         }
         this._enemies.push(new Enemy(new Vector2D(Canvases.canvasWidth, Math.random() * Canvases.canvasHeight)));
-        window.setTimeout(() => this.spawnEnemy(), 2000);
+        window.setTimeout(() => this.spawnEnemy(), gameSettings.enemySpawnRate * 1000);
     }
 
     draw() {
@@ -39,7 +39,7 @@ class Enemy extends MovableEntity {
 
     constructor(position: Vector2D, width: number = 30, height: number = 30) {
         super(position, width, height);
-        this._speed = 4;
+        this._speed = gameSettings.enemySpeed;
         this._actorType = ActorType.Enemy;
         this.setNewHeading();
     }

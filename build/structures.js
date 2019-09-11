@@ -15,6 +15,9 @@ class Vector2D {
         this.x *= scalar;
         this.y *= scalar;
     }
+    multiply(scalar) {
+        return new Vector2D(this.x * scalar, this.y * scalar);
+    }
     normalize() {
         let magnitude = this.magnitude;
         this.x /= magnitude;
@@ -129,7 +132,7 @@ class MovableEntity {
     get collider() { return this._collider; }
     get actorType() { return this._actorType; }
     updatePosition(direction) {
-        this._position.add(direction);
+        this._position.add(direction.multiply(game.deltaTime));
     }
     draw(context, sprite = this._sprite) {
         context.drawImage(sprite, this._position.x, this._position.y, this._width, this._height);

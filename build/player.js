@@ -1,11 +1,11 @@
 /**Represents the player's ship. Needs a draw() call each frame. */
 class Player extends MovableEntity {
-    constructor(width = 50, height = 50) {
-        super(new Vector2D(0, Canvases.canvasHeight / 2), width, height);
+    constructor() {
+        super(new Vector2D(0, Canvases.canvasHeight / 2), gameSettings.playerWidth, gameSettings.playerHeight);
         this._destroyed = false;
         this._input = new InputHandler(this, 5);
-        this._width = width;
-        this._height = height;
+        this._width = gameSettings.playerWidth;
+        this._height = gameSettings.playerHeight;
         this._sprite = new Image();
         this._sprite.src = "sprites/player.bmp";
         this._actorType = ActorType.Player;
@@ -53,13 +53,19 @@ class InputHandler {
     constructor(player, speed) {
         this.keys = new Map();
         this.player = player;
-        this.speed = speed;
+        this.speed = gameSettings.playerSpeed;
     }
     handleKeyDown(evt) {
+        if (evt.altKey || evt.ctrlKey || evt.shiftKey) {
+            return;
+        }
         this.keys.set(evt.key.toLowerCase(), true);
         evt.preventDefault();
     }
     handleKeyUp(evt) {
+        if (evt.altKey || evt.ctrlKey || evt.shiftKey) {
+            return;
+        }
         this.keys.set(evt.key.toLowerCase(), false);
         evt.preventDefault();
     }

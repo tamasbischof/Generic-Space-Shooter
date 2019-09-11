@@ -3,8 +3,6 @@ class BackgroundLayer {
     constructor() {
         this._farOffset = 0; //keeps track where to draw the background pattern
         this._nearOffset = 0;
-        this._farSpeed = 1; //how fast the background should move
-        this._nearSpeed = 4;
         this._nearBackgroundImg = new Image();
         this._nearBackgroundImg.src = "sprites/meteorBackground.bmp";
         this._farBackgroundImg = new Image();
@@ -18,13 +16,13 @@ class BackgroundLayer {
     }
     calculateOffset() {
         if (this._nearOffset < Canvases.canvasWidth + this._nearBackgroundImg.width) {
-            this._nearOffset += this._nearSpeed;
+            this._nearOffset += gameSettings.nearBackgroundSpeed * game.deltaTime;
         }
         else {
             this._nearOffset = 0;
         }
         if (this._farOffset < Canvases.canvasWidth + this._farBackgroundImg.width) {
-            this._farOffset += this._farSpeed;
+            this._farOffset += gameSettings.farBackgroundSpeed * game.deltaTime;
         }
         else {
             this._farOffset = 0;
@@ -59,7 +57,7 @@ class ProjectileLayer {
         }
         this._projectiles.push(new Projectile(position));
         this._canShoot = false;
-        window.setTimeout(() => { this._canShoot = true; }, 500);
+        window.setTimeout(() => { this._canShoot = true; }, gameSettings.playerShotCooldown * 1000);
     }
     draw() {
         this._projectiles.forEach(projectile => {
@@ -75,7 +73,7 @@ class ProjectileLayer {
             return emitter.active;
         });
         if (this._emitters.length == 0 && game.player.destroyed) {
-            game._gameOver = true;
+            game.setGameOver();
         }
     }
 }
@@ -85,7 +83,7 @@ class Projectile extends MovableEntity {
         super(position, width, height);
         //put projectile's center at position
         this._position.y -= this._height / 2;
-        this._speed = 7;
+        this._speed = gameSettings.projectileSpeed;
         this._heading = new Vector2D(this._speed, 0);
         this._actorType = ActorType.Projectile;
     }

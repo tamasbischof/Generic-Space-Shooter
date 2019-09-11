@@ -6,11 +6,11 @@ class Player extends MovableEntity {
 
     get destroyed(): boolean { return this._destroyed; }
 
-    constructor(width: number = 50, height: number = 50) {
-        super(new Vector2D(0, Canvases.canvasHeight / 2), width, height);
+    constructor() {
+        super(new Vector2D(0, Canvases.canvasHeight / 2), gameSettings.playerWidth, gameSettings.playerHeight);
         this._input = new InputHandler(this, 5);
-        this._width = width;
-        this._height = height;
+        this._width = gameSettings.playerWidth;
+        this._height = gameSettings.playerHeight;
         this._sprite = new Image();
         this._sprite.src = "sprites/player.bmp";
         this._actorType = ActorType.Player;
@@ -68,15 +68,21 @@ class InputHandler {
     constructor(player: Player, speed: number) {
         this.keys = new Map<string,boolean>();
         this.player = player;
-        this.speed = speed;
+        this.speed = gameSettings.playerSpeed;
     }
 
     handleKeyDown(evt:KeyboardEvent) {
+        if (evt.altKey || evt.ctrlKey || evt.shiftKey) {
+            return;
+        }
         this.keys.set(evt.key.toLowerCase(), true);
         evt.preventDefault();
     }
 
     handleKeyUp(evt:KeyboardEvent) {
+        if (evt.altKey || evt.ctrlKey || evt.shiftKey) {
+            return;
+        }
         this.keys.set(evt.key.toLowerCase(), false);
         evt.preventDefault();
     }

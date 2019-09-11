@@ -128,16 +128,16 @@ class WhiteSquareParticle extends Particle {
 
     constructor(startPosition: Vector2D) {
         super(WhiteSquareParticle.sprite, startPosition);
-        this._speed = 1.5;
+        this._speed = gameSettings.squareParticleSpeed;
         this._velocity = Vector2D.getRandom();
         this._velocity.normalize();
         this._velocity.scale(this._speed);
-        this._lifeTime = 1;
+        this._lifeTime = gameSettings.squareParticleLifetime;
         this._expired = false;
     }
 
     protected updatePosition() {
-        this._position.add(this._velocity);
+        this._position.add(this._velocity.multiply(game.deltaTime));
     }
 
     draw() {
@@ -164,11 +164,12 @@ class StarParticle extends Particle {
     static sprite: HTMLImageElement;
     private _currentAlpha: number = 1;
     private _delay: number;
-    private _degradation: number = 0.016;
+    private _decay: number;
 
     constructor(startPosition: Vector2D) {
         super(StarParticle.sprite, startPosition);
-        this._lifeTime = 1.5;
+        this._lifeTime = gameSettings.starParticleLifetime;
+        this._decay = gameSettings.starParticleDecaySpeed;
         this._delay = Math.random();
         this._expired = false;
     }
@@ -178,11 +179,11 @@ class StarParticle extends Particle {
     }
 
     draw() {
-        this._delay -= this._degradation;
+        this._delay -= this._decay;
         if (this._delay > 0) {
             return;
         }
-        this._currentAlpha -= this._degradation / this._lifeTime;
+        this._currentAlpha -= this._decay / this._lifeTime;
         //after the animation is complete
         if (this._currentAlpha <= 0) {
             this._expired = true;

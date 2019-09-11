@@ -3,7 +3,7 @@ class Splash {
 
     private _splashImg: HTMLImageElement = new Image();
     _alpha: number = 0;
-    _fadeSpeed: number = 0.02;
+    _fadeSpeed: number;
 
     constructor() {
         //load splash bmp
@@ -13,6 +13,8 @@ class Splash {
         Canvases.fcContext.fillStyle = "#5E3F6B";
         Canvases.fcContext.rect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
         Canvases.fcContext.fill();
+        //animation setup
+        this._fadeSpeed = gameSettings.splashFadeSpeed;
         window.requestAnimationFrame(() => this.draw());
     }
 
@@ -23,7 +25,7 @@ class Splash {
         Canvases.acContext.globalAlpha = this._alpha;
         if (this._alpha >= 1) { //will be hit only when the splash has been faded in
             this._fadeSpeed = -this._fadeSpeed;
-            window.setTimeout(() => this.draw(), 2000);
+            window.setTimeout(() => this.draw(), gameSettings.splashLingerDuration * 1000);
             Canvases.acContext.drawImage(this._splashImg, 0, 0);
             return;
         }
@@ -159,8 +161,7 @@ MenuButton.exitButton.src = "sprites/exitButton.bmp";
 /**Animates the Game Over message over the current scene on instantiation, then transitions to the menu. */
 class GameOver {
 
-    private _fadeDuration: number = 0.5;
-    private _lingerDuration: number = 3;
+    private _fadeDuration: number;
     private _gameOverGraphic: HTMLImageElement = new Image();
     private _currentAlpha: number = 0;
 
@@ -168,6 +169,7 @@ class GameOver {
         Canvases.pcContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
         Canvases.acContext.clearRect(0, 0, Canvases.canvasWidth, Canvases.canvasHeight);
         this._gameOverGraphic.src = "sprites/gameOver.bmp";
+        this._fadeDuration = gameSettings.gameOverFadeDuration;
         window.requestAnimationFrame(() => this.draw());
     }
 
@@ -178,7 +180,7 @@ class GameOver {
         //this will be hit only after the image has full opacity
         if (this._currentAlpha >= 1) {
             this._fadeDuration = -this._fadeDuration;
-            window.setTimeout(() => this.draw(), this._lingerDuration * 1000);
+            window.setTimeout(() => this.draw(), gameSettings.gameOverLingerDuration * 1000);
             Canvases.acContext.drawImage(this._gameOverGraphic, 0, 0);
             return;
         }

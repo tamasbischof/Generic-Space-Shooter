@@ -8,7 +8,7 @@ class Game {
     private _collisionChecker: CollisionChecker;
     private _lastFrameTimeStamp: number = 0; //keeps track of the time signature of the last frame
     private _currentFrameTimeStamp: number = 0; //same for current frame
-    _gameOver: boolean = false;
+    private _gameOver: boolean = false;
 
     public get player(): Player { return this._player; }
     public get collisionChecker(): CollisionChecker { return this._collisionChecker; }
@@ -28,6 +28,7 @@ class Game {
         this._projectileLayer = new ProjectileLayer();
         this._player = new Player();
         this._enemySpawner = new EnemySpawner();
+        new GameSettings();
     }
 
     draw(time: number) {
@@ -52,5 +53,9 @@ class Game {
         this._enemySpawner.draw();
         //fire next frame
         window.requestAnimationFrame((timeStamp) => this.draw(timeStamp));
+    }
+
+    setGameOver() {
+        this._gameOver = true;
     }
 }
